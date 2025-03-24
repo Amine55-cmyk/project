@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('nav ul li a');
     const contactForm = document.getElementById('contact-form');
     const header = document.querySelector('header');
+    
     // Función para toggle del menú mobile
     if (menuToggle) {
         menuToggle.addEventListener('click', function() {
@@ -48,13 +49,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Inicializar EmailJS
+    emailjs.init("Pr_N7azP6hgmQqWcN");
+    
     // Manejo del formulario de contacto
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            // Aquí iría la lógica para enviar el formulario
-            console.log('Formulario enviado');
-            contactForm.reset();
+
+            // Enviar el formulario usando EmailJS
+            emailjs.sendForm('service_xogxu0q', 'template_o8a2g9o', contactForm)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                alert('Mensaje enviado con éxito');
+                contactForm.reset();
+            }, function(error) {
+                console.error('FAILED...', error);
+                alert('Hubo un problema al enviar el mensaje: ' + error.text);
+            });
         });
     }
 });
